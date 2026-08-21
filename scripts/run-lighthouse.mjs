@@ -138,7 +138,6 @@ async function main() {
         output: 'json',
         onlyCategories: CATEGORIES,
         logLevel: 'error',
-        throttlingMethod: 'provided',
       },
       desktopConfig,
     )

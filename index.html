@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Mandelbulb Explorer</title>
+  </head>
+  <body>
+    <noscript>
+      <p>This explorer needs JavaScript and WebGL2.</p>
+    </noscript>
+    <canvas
+      id="viewport"
+      role="img"
+      tabindex="0"
+      aria-label="Raymarched three-dimensional Mandelbulb"
+    ></canvas>
+    <aside id="hud" aria-label="Explorer status and keyboard controls">
+      <p id="hud-values" aria-live="polite"></p>
+      <p id="hud-fps"></p>
+      <p id="hud-help"></p>
+    </aside>
+    <div id="error" hidden role="alert"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+---
+description: Mandelbulb Explorer project rules
+alwaysApply: true
+---
+
+Follow AGENTS.md and PLAN.md. This is a static Vite + TypeScript WebGL2
+Mandelbulb explorer.
+
+- Pin TypeScript to 6.x (typescript-eslint peers exclude 7).
+- `npm run quality` must pass. eslint and stylelint use `--max-warnings=0`.
+- Dead code: knip `--strict` plus dpdm for cycles. Do not add madge.
+- No `any`, no non-null assertions, no silent catch, no fake render path.
+- Magic numbers belong in `src/constants.ts`.
+- HUD uses `textContent` only.
+- Coverage thresholds are load-bearing; do not lower them to hide dead
+  branches.
+- README documents only commands that have been run. CHANGELOG records
+  what landed. PLAN.md records decisions and gate proofs.

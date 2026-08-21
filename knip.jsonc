@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  // Auto-detect via the Vite plugin. Explicit `src/**` globs matched zero
+  // files on this Windows path (`New folder (3)`), so they were a hole:
+  // knip would report a clean graph while ignoring the source tree.
+  // `cycles` is omitted; dpdm is the cycle gate.
+  // knip 6.32 `--strict` means "production deps only", not fail-closed.
+  "ignoreBinaries": ["gitleaks"],
+  "ignoreExportsUsedInFile": true,
+  "rules": {
+    "files": "error",
+    "dependencies": "error",
+    "devDependencies": "error",
+    "unlisted": "error",
+    "unresolved": "error",
+    "exports": "error",
+    "types": "error",
+    "duplicates": "error",
+    "binaries": "error",
+    "enumMembers": "error",
+  },
+}

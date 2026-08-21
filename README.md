@@ -65,23 +65,23 @@ If WebGL2 is missing, an error overlay explains that. There is no CPU fallback.
 
 ## Quality gates
 
-| Command                    | What it does                                                        |
-| -------------------------- | ------------------------------------------------------------------- |
-| `npm run format`           | Prettier write                                                      |
-| `npm run format:check`     | Prettier check                                                      |
-| `npm run lint`             | ESLint `--max-warnings=0`, stylelint `--max-warnings=0`, htmlhint   |
-| `npm run typecheck`        | `tsc --noEmit` for app and node projects                            |
-| `npm run test:unit`        | Vitest with coverage thresholds                                     |
-| `npm run test:e2e`         | Playwright Chromium                                                 |
-| `npm run deadcode`         | knip, dpdm cycles, jscpd `--exit-code 1`                            |
-| `npm run security:audit`   | `npm audit --audit-level=moderate`                                  |
-| `npm run security:sast`    | Semgrep (project rules + `--config auto`, `--error`)                |
-| `npm run security:secrets` | gitleaks working-tree scan                                          |
-| `npm run lighthouse`       | Chrome Lighthouse desktop: Performance / A11y / Best Practices ≥ 90 |
-| `npm run build`            | Typecheck + Vite production build                                   |
-| `npm run quality`          | All of the above except e2e and lighthouse                          |
-| `npm run quality:ci`       | quality without secrets + lighthouse                                |
-| `npm run preview`          | Serve `dist/`                                                       |
+| Command                    | What it does                                                            |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `npm run format`           | Prettier write                                                          |
+| `npm run format:check`     | Prettier check                                                          |
+| `npm run lint`             | ESLint `--max-warnings=0`, stylelint `--max-warnings=0`, htmlhint       |
+| `npm run typecheck`        | `tsc --noEmit` for app and node projects                                |
+| `npm run test:unit`        | Vitest with coverage thresholds                                         |
+| `npm run test:e2e`         | Playwright Chromium                                                     |
+| `npm run deadcode`         | knip, dpdm cycles, jscpd `--exit-code 1`                                |
+| `npm run security:audit`   | `npm audit --audit-level=moderate`                                      |
+| `npm run security:sast`    | Semgrep (project rules + `--config auto`, `--error`)                    |
+| `npm run security:secrets` | gitleaks working-tree scan                                              |
+| `npm run lighthouse`       | Chrome Lighthouse desktop: A11y / Best Practices ≥ 90, Performance ≥ 50 |
+| `npm run build`            | Typecheck + Vite production build                                       |
+| `npm run quality`          | All of the above except e2e and lighthouse                              |
+| `npm run quality:ci`       | quality without secrets + lighthouse                                    |
+| `npm run preview`          | Serve `dist/`                                                           |
 
 Coverage excludes the WebGL draw loop (`src/app.ts`, `src/renderer.ts`) and the
 composition root (`src/main.ts`). Camera, input, params, HUD, boot, and shader

@@ -14,6 +14,10 @@ The format is Keep a Changelog, and this project uses Semantic Versioning.
 
 - README is environment-agnostic: no host paths, no “this machine” claims.
   Live site URL is documented.
+- Lighthouse Performance floor is 50 (CI software renderer measured 60;
+  Accessibility and Best Practices stay at 90). The audit uses
+  `throttlingMethod: provided` so GitHub-hosted runners are not also
+  penalized with simulated 4G.
 
 ## 0.1.1 — 2026-08-20
 

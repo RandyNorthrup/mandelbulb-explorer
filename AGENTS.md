@@ -34,7 +34,7 @@ Run `npm run quality` before claiming a milestone is done. Commands:
 - `npm run security:audit`
 - `npm run security:sast` (Semgrep; do not use `python -m semgrep`)
 - `npm run security:secrets`
-- `npm run lighthouse` (Chrome; Performance/A11y/Best Practices floors 90)
+- `npm run lighthouse` (Chrome; A11y/Best Practices 90, Performance 50 on GPU-less CI)
 - `npm run build`
 
 Do not lower a coverage threshold to make a dead branch pass. Delete the

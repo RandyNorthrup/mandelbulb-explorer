@@ -8,7 +8,8 @@ The format is Keep a Changelog, and this project uses Semantic Versioning.
 
 ### Added
 
-- Public GitHub repository and GitHub Pages deploy from Actions.
+- Public GitHub repository https://github.com/RandyNorthrup/mandelbulb-explorer
+  and GitHub Pages at https://randynorthrup.github.io/mandelbulb-explorer/ .
 
 ### Changed
 

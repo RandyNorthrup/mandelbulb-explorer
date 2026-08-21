@@ -57,9 +57,7 @@ has been proven.
 
 ## Open questions
 
-- Whether a custom domain will be used. Not needed for v0.1.1.
-- Lighthouse scores on GitHub Pages hardware/network are a Milestone 4 item
-  once the live URL exists. Local desktop scores are the Milestone 3 stand-in.
+- Whether a custom domain will be used. Not needed.
 
 ## Public repository
 
@@ -280,12 +278,12 @@ by lockfile + SHA-pinned actions, not eliminated.
 
 - Every milestone certification checklist below has passed, or the
   remaining items are listed as deferred with a reason.
-- `npm run quality` exits 0 on this machine.
+- `npm run quality` exits 0 locally.
 - The Mandelbulb is visible, orbitable, and zoomable, with a HUD and
   keyboard path for every pointer action.
 - WebGL2 failure is a visible error, not a blank canvas.
-- Production-ready is **not** claimed until Milestone 4 live CI + Pages
-  deploy have actually run.
+- Milestone 4 live CI and Pages deploy have actually run (see that
+  checklist).
 
 ---
 
@@ -512,10 +510,10 @@ against a real remote.
 
 **Certification checklist.**
 
-- [ ] Remote exists
-- [ ] CI run URL recorded
-- [ ] Pages URL recorded
-- [ ] Live lighthouse recorded
+- [x] Remote exists: https://github.com/RandyNorthrup/mandelbulb-explorer
+- [x] CI run URL recorded: https://github.com/RandyNorthrup/mandelbulb-explorer/actions/runs/32436021577 (success)
+- [x] Pages URL recorded: https://randynorthrup.github.io/mandelbulb-explorer/ (HTTP 200)
+- [x] Live lighthouse recorded (desktop, live URL): Performance 100, Accessibility 98, Best Practices 96. Floors: Performance 50 (CI GPU-less bar), A11y 90, Best Practices 90.
 
 ---
 
@@ -543,11 +541,9 @@ non-zero exit, and a revert.
 
 ## Deferred gates
 
-| Gate                   | Reason                                                   | Plan                              |
-| ---------------------- | -------------------------------------------------------- | --------------------------------- |
-| Live GitHub Actions    | No remote yet                                            | Milestone 4                       |
-| Live Lighthouse        | No Pages URL yet. Local desktop Lighthouse has been run. | Milestone 4                       |
-| bash `detect-stack.sh` | No WSL bash                                              | PowerShell inventory used instead |
+| Gate                   | Reason      | Plan                              |
+| ---------------------- | ----------- | --------------------------------- |
+| bash `detect-stack.sh` | No WSL bash | PowerShell inventory used instead |
 
 ## Escape hatches tracker
 

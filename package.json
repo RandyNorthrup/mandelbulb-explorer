@@ -1,6 +1,6 @@
 {
   "name": "mandelbulb-explorer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Interactive WebGL2 raymarched 3D Mandelbulb explorer.",
   "type": "module",

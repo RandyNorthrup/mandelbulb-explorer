@@ -28,14 +28,13 @@ has been proven.
 - GitHub Pages project-site and user-site both work because Vite `base` is
   `./` (relative asset URLs).
 - CI cannot be executed against GitHub until a remote exists. The workflow
-  file is written and reviewed; first live run is a remaining certification
-  item for Milestone 4.
+  file is written and reviewed; first live run is Milestone 4.
 - `pre-commit` 4.5.1 is installed as a Python module (`python -m pre_commit`).
   The `pre-commit` executable is not on PATH. Hooks invoke
   `python -m pre_commit` and the `gitleaks` binary (8.30.1, on PATH).
-- Semgrep is not installed locally. It will be attempted; if Windows install
-  fails, the gate runs on Ubuntu CI only and is listed under deferred gates
-  until a local run has been seen to fail on a planted finding.
+- Semgrep 1.174.0 is installed via pip. The working CLI is `pysemgrep`;
+  `python -m semgrep` is a deprecated stub. `npm run security:sast` locates
+  the binary.
 
 ## Resolved decisions
 
@@ -58,12 +57,16 @@ has been proven.
 
 ## Open questions
 
-- GitHub repository name (affects the Pages URL, not the build, because
-  `base` is `./`).
-- Whether a custom domain will be used. Not needed for v0.1.0.
-- Lighthouse scores on GitHub Pages hardware/network cannot be measured
-  until Milestone 4 has a live URL. Local preview scores are the Milestone 3
-  stand-in.
+- Whether a custom domain will be used. Not needed for v0.1.1.
+- Lighthouse scores on GitHub Pages hardware/network are a Milestone 4 item
+  once the live URL exists. Local desktop scores are the Milestone 3 stand-in.
+
+## Public repository
+
+- Owner: `RandyNorthrup`
+- Name: `mandelbulb-explorer` (public)
+- Pages URL: `https://randynorthrup.github.io/mandelbulb-explorer/`
+- Custom domain: none
 
 ## Architecture
 
@@ -342,7 +345,7 @@ does not yet apply (no renderer).
 
 - [x] Gate proving log complete for every configured gate
 - [x] `npm run quality` run, exit 0
-- [ ] First commit exists (done at the end of this session)
+- [x] First commit exists (`b4bb9b9`)
 - [x] No file that already existed was overwritten (N/A: empty repo)
 
 ### Milestone 1 — Raymarched Mandelbulb

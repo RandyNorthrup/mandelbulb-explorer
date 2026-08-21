@@ -3,6 +3,8 @@
 Interactive WebGL2 raymarched 3D Mandelbulb. Drag to orbit, wheel to zoom,
 keyboard for every action, HUD for live parameters.
 
+**Live site:** [https://randynorthrup.github.io/mandelbulb-explorer/](https://randynorthrup.github.io/mandelbulb-explorer/)
+
 This is a static client-only app. There is no backend, no authentication, and
 no required environment variables.
 
@@ -16,24 +18,25 @@ no required environment variables.
 
 ## Requirements
 
-- Node.js 22.12.0 or newer (verified on v22.19.0)
-- npm 10.9.3 (comes with that Node)
-- A browser with WebGL2. Chrome is used for Lighthouse and the DevTools MCP.
-- For `npm run security:secrets` and the pre-commit hook: [gitleaks](https://github.com/gitleaks/gitleaks) on PATH (verified 8.30.1)
-- For `npm run security:sast`: [Semgrep](https://semgrep.dev) 1.174.0 (`pip install semgrep`). On Windows use `pysemgrep`, not `python -m semgrep`.
-- For `npm run lighthouse`: Google Chrome (verified at `C:\Program Files\Google\Chrome\Application\chrome.exe`)
-- For `npm run test:e2e`: Playwright Chromium (`npx playwright install chromium`)
+- Node.js 22.12.0 or newer (see `package.json` `engines`)
+- npm 10.9.x
+- A browser with WebGL2
+- Google Chrome or Chromium for `npm run lighthouse`
+- [gitleaks](https://github.com/gitleaks/gitleaks) on PATH for `npm run security:secrets` and the pre-commit hook
+- [Semgrep](https://semgrep.dev) 1.174.0 (`pip install semgrep`) for `npm run security:sast`. Use the `pysemgrep` / `semgrep` binary, not `python -m semgrep`.
+- Playwright Chromium for `npm run test:e2e` (`npx playwright install chromium`)
 
 ## Install
 
 ```bash
 npm ci
 npx playwright install chromium
-python -m pre_commit install
+pre-commit install
 ```
 
-`npm ci` needs the lockfile (this repository includes it). For a first-time
-install from a dirty tree, `npm install` also works.
+If `pre-commit` is not on PATH, `python -m pre_commit install` works after
+`pip install pre-commit`. `npm ci` needs the lockfile in this repository. For a
+first-time install from a dirty tree, `npm install` also works.
 
 ## Development
 
@@ -61,8 +64,6 @@ Open the printed local URL. The canvas fills the viewport.
 If WebGL2 is missing, an error overlay explains that. There is no CPU fallback.
 
 ## Quality gates
-
-These commands have been run successfully on this machine:
 
 | Command                    | What it does                                                        |
 | -------------------------- | ------------------------------------------------------------------- |
@@ -116,15 +117,12 @@ npm run build
 npm run preview
 ```
 
-Production JS in `dist/assets` was 15.19 KiB uncompressed (5.54 KiB gzip) on
-2026-08-20, under the 80 KiB budget.
+Production JS in `dist/assets` is about 15 KiB uncompressed (about 5.5 KiB
+gzip), under the 80 KiB budget.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs quality gates on pull requests
-and on `main`. Pushes to `main` upload `dist/` and deploy to GitHub Pages.
-Enable Pages with **Source: GitHub Actions** in the repository settings. There
-is no live Pages URL until a remote exists (Milestone 4).
-
-Action SHAs are pinned. See PLAN.md.
+and on `main`. Pushes to `main` upload `dist/` and deploy to GitHub Pages
+(source: GitHub Actions). Action SHAs are pinned; see PLAN.md.
 
 ## Security
 
@@ -140,16 +138,14 @@ Action SHAs are pinned. See PLAN.md.
 
 - **Black canvas with an error overlay** — the browser has no WebGL2. Use a
   current Chromium, Firefox, or Safari.
-- **`gitleaks` not found** — install the binary or skip `security:secrets` only
-  if you understand you are skipping a gate. CI still runs gitleaks-action.
-- **`npm run quality` fails on secrets before the first commit** — the script
-  uses `--no-git` and scans files; that works without commits.
+- **`gitleaks` not found** — install the binary. CI still runs gitleaks-action.
 - **TypeScript 7** — do not upgrade. typescript-eslint 8.67.0 peers stop at
   `<6.1.0`. See PLAN.md.
 - **`python -m semgrep` exits 2** — that entry point is a deprecated stub.
   Use `npm run security:sast`, which runs `pysemgrep`.
-- **`semgrep` not found** — `pip install semgrep` (user install). The npm
-  script adds `%APPDATA%\Python\<version>\Scripts` to PATH on Windows.
+- **`semgrep` / `pysemgrep` not found** — `pip install semgrep`. On Windows a
+  pip `--user` install puts the binary in the user Python Scripts directory;
+  `npm run security:sast` adds that directory to PATH.
 
 ## License
 

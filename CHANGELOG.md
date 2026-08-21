@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file.
 
 The format is Keep a Changelog, and this project uses Semantic Versioning.
 
+## 0.1.2 — 2026-08-20
+
+### Added
+
+- Public GitHub repository and GitHub Pages deploy from Actions.
+
+### Changed
+
+- README is environment-agnostic: no host paths, no “this machine” claims.
+  Live site URL is documented.
+
 ## 0.1.1 — 2026-08-20
 
 ### Added

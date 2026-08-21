@@ -30,9 +30,11 @@ Run `npm run quality` before claiming a milestone is done. Commands:
 - `npm run typecheck`
 - `npm run test:unit` (coverage thresholds are load-bearing)
 - `npm run test:e2e`
-- `npm run deadcode` (knip `--strict`, dpdm cycles, jscpd)
+- `npm run deadcode` (knip, dpdm cycles, jscpd)
 - `npm run security:audit`
+- `npm run security:sast` (Semgrep; do not use `python -m semgrep`)
 - `npm run security:secrets`
+- `npm run lighthouse` (Chrome; Performance/A11y/Best Practices floors 90)
 - `npm run build`
 
 Do not lower a coverage threshold to make a dead branch pass. Delete the

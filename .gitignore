@@ -11,6 +11,8 @@ blob-report/
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/
+.vscode/*
+!.vscode/mcp.json
 *.tsbuildinfo
 mandelbulb-*.png
+lighthouse-report/

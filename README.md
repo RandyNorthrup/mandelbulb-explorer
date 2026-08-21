@@ -18,8 +18,10 @@ no required environment variables.
 
 - Node.js 22.12.0 or newer (verified on v22.19.0)
 - npm 10.9.3 (comes with that Node)
-- A browser with WebGL2
+- A browser with WebGL2. Chrome is used for Lighthouse and the DevTools MCP.
 - For `npm run security:secrets` and the pre-commit hook: [gitleaks](https://github.com/gitleaks/gitleaks) on PATH (verified 8.30.1)
+- For `npm run security:sast`: [Semgrep](https://semgrep.dev) 1.174.0 (`pip install semgrep`). On Windows use `pysemgrep`, not `python -m semgrep`.
+- For `npm run lighthouse`: Google Chrome (verified at `C:\Program Files\Google\Chrome\Application\chrome.exe`)
 - For `npm run test:e2e`: Playwright Chromium (`npx playwright install chromium`)
 
 ## Install
@@ -62,21 +64,23 @@ If WebGL2 is missing, an error overlay explains that. There is no CPU fallback.
 
 These commands have been run successfully on this machine:
 
-| Command                    | What it does                                                      |
-| -------------------------- | ----------------------------------------------------------------- |
-| `npm run format`           | Prettier write                                                    |
-| `npm run format:check`     | Prettier check                                                    |
-| `npm run lint`             | ESLint `--max-warnings=0`, stylelint `--max-warnings=0`, htmlhint |
-| `npm run typecheck`        | `tsc --noEmit` for app and node projects                          |
-| `npm run test:unit`        | Vitest with coverage thresholds                                   |
-| `npm run test:e2e`         | Playwright Chromium                                               |
-| `npm run deadcode`         | knip, dpdm cycles, jscpd `--exit-code 1`                          |
-| `npm run security:audit`   | `npm audit --audit-level=moderate`                                |
-| `npm run security:secrets` | gitleaks working-tree scan                                        |
-| `npm run build`            | Typecheck + Vite production build                                 |
-| `npm run quality`          | All of the above except e2e                                       |
-| `npm run quality:ci`       | format, lint, types, unit, deadcode, audit, build                 |
-| `npm run preview`          | Serve `dist/`                                                     |
+| Command                    | What it does                                                        |
+| -------------------------- | ------------------------------------------------------------------- |
+| `npm run format`           | Prettier write                                                      |
+| `npm run format:check`     | Prettier check                                                      |
+| `npm run lint`             | ESLint `--max-warnings=0`, stylelint `--max-warnings=0`, htmlhint   |
+| `npm run typecheck`        | `tsc --noEmit` for app and node projects                            |
+| `npm run test:unit`        | Vitest with coverage thresholds                                     |
+| `npm run test:e2e`         | Playwright Chromium                                                 |
+| `npm run deadcode`         | knip, dpdm cycles, jscpd `--exit-code 1`                            |
+| `npm run security:audit`   | `npm audit --audit-level=moderate`                                  |
+| `npm run security:sast`    | Semgrep (project rules + `--config auto`, `--error`)                |
+| `npm run security:secrets` | gitleaks working-tree scan                                          |
+| `npm run lighthouse`       | Chrome Lighthouse desktop: Performance / A11y / Best Practices ≥ 90 |
+| `npm run build`            | Typecheck + Vite production build                                   |
+| `npm run quality`          | All of the above except e2e and lighthouse                          |
+| `npm run quality:ci`       | quality without secrets + lighthouse                                |
+| `npm run preview`          | Serve `dist/`                                                       |
 
 Coverage excludes the WebGL draw loop (`src/app.ts`, `src/renderer.ts`) and the
 composition root (`src/main.ts`). Camera, input, params, HUD, boot, and shader
@@ -142,6 +146,10 @@ Action SHAs are pinned. See PLAN.md.
   uses `--no-git` and scans files; that works without commits.
 - **TypeScript 7** — do not upgrade. typescript-eslint 8.67.0 peers stop at
   `<6.1.0`. See PLAN.md.
+- **`python -m semgrep` exits 2** — that entry point is a deprecated stub.
+  Use `npm run security:sast`, which runs `pysemgrep`.
+- **`semgrep` not found** — `pip install semgrep` (user install). The npm
+  script adds `%APPDATA%\Python\<version>\Scripts` to PATH on Windows.
 
 ## License
 

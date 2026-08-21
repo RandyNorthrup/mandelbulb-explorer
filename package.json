@@ -1,6 +1,6 @@
 {
   "name": "mandelbulb-explorer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Interactive WebGL2 raymarched 3D Mandelbulb explorer.",
   "type": "module",
@@ -23,14 +23,18 @@
     "deadcode": "knip --treat-config-hints-as-errors && dpdm --no-warning --no-tree --exit-code circular:1 src/main.ts && jscpd src --exit-code 1",
     "security:audit": "npm audit --audit-level=moderate",
     "security:secrets": "gitleaks detect --no-git --redact --verbose --source .",
-    "quality": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run deadcode && npm run security:audit && npm run security:secrets && npm run build",
-    "quality:ci": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run deadcode && npm run security:audit && npm run build"
+    "security:sast": "node scripts/run-semgrep.mjs",
+    "lighthouse": "node scripts/run-lighthouse.mjs",
+    "quality": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run deadcode && npm run security:audit && npm run security:sast && npm run security:secrets && npm run build",
+    "quality:ci": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run deadcode && npm run security:audit && npm run security:sast && npm run build && npm run lighthouse"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.62.1",
     "@types/node": "22.20.1",
     "@vitest/coverage-v8": "4.1.11",
+    "chrome-devtools-mcp": "1.7.0",
+    "chrome-launcher": "1.2.1",
     "dpdm": "4.3.0",
     "eslint": "10.8.1",
     "eslint-plugin-unicorn": "73.0.0",
@@ -39,6 +43,7 @@
     "jscpd": "5.0.16",
     "jsdom": "29.1.1",
     "knip": "6.32.2",
+    "lighthouse": "13.4.1",
     "prettier": "3.9.6",
     "stylelint": "17.14.1",
     "stylelint-config-standard": "40.0.0",

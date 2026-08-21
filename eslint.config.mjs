@@ -115,6 +115,8 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-magic-numbers': 'off',
       'unicorn/filename-case': 'off',
+      'no-console': 'off',
+      'unicorn/no-process-exit': 'off',
     },
   },
   {

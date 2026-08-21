@@ -141,6 +141,10 @@ ESLint rule (`no-floating-promises`, `no-unsafe-*`, etc.). Pin
 | `htmlhint`                  | 1.9.2   | Current                                                                                                                                                                                                                                                                                                                                                   |
 | `@playwright/test`          | 1.62.1  | Current. Engines `node >=20`                                                                                                                                                                                                                                                                                                                              |
 | `@types/node`               | 22.20.1 | Matches Node 22; required by Vite/Vitest optional peer                                                                                                                                                                                                                                                                                                    |
+| `lighthouse`                | 13.4.1  | Current. Engines `node >=22.19` (matches this machine). SEO category not run.                                                                                                                                                                                                                                                                             |
+| `chrome-launcher`           | 1.2.1   | Lighthouse 13.4.1 dependency; also a direct import in `scripts/run-lighthouse.mjs`                                                                                                                                                                                                                                                                        |
+| `chrome-devtools-mcp`       | 1.7.0   | Google's Chrome DevTools MCP for agents. Not imported by the app.                                                                                                                                                                                                                                                                                         |
+| `semgrep` (PyPI)            | 1.174.0 | `python -m semgrep` is a stub that exits 2. The working binary is `pysemgrep`.                                                                                                                                                                                                                                                                            |
 
 **Not used:** `madge` (peerOptional `typescript@^5.4.4`; npm would suggest
 `--legacy-peer-deps`). Cycle detection is `dpdm`.
@@ -157,6 +161,8 @@ objects, not annotated tags).
 | `actions/upload-pages-artifact` | v5.0.0 | `fc324d3547104276b827a68afc52ff2a11cc49c9` |
 | `actions/deploy-pages`          | v5.0.0 | `cd2ce8fcbc39b97be8ca5fce6e763baed58fa128` |
 | `gitleaks/gitleaks-action`      | v3.0.0 | `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e` |
+| `actions/setup-python`          | v7.0.0 | `5fda3b95a4ea91299a34e894583c3862153e4b97` |
+| `browser-actions/setup-chrome`  | v2.2.0 | `48ad923757ca74d66703209fe939badbdf80f2f4` |
 
 `gitleaks-action` v3 is Node 24. It requires `GITHUB_TOKEN`. Organization
 repos also need `GITLEAKS_LICENSE`; this project is assumed personal/public.
@@ -191,10 +197,12 @@ Commands (must fail the process on findings):
 | dead code      | `npm run deadcode`         | knip (max-issues 0 + config hints as errors); dpdm cycles; jscpd `--threshold 0` |
 | security audit | `npm run security:audit`   | `npm audit --audit-level=moderate`                                               |
 | secrets        | `npm run security:secrets` | gitleaks non-zero on leak                                                        |
+| SAST           | `npm run security:sast`    | Semgrep `--error` with `.semgrep.yml` plus `--config auto`                       |
+| lighthouse     | `npm run lighthouse`       | floors 90 for Performance, Accessibility, Best Practices (SEO excluded)          |
 | build          | `npm run build`            | vite build                                                                       |
 | e2e            | `npm run test:e2e`         | playwright                                                                       |
-| aggregate      | `npm run quality`          | any of the above except e2e                                                      |
-| CI aggregate   | `npm run quality:ci`       | quality + e2e; gitleaks-action is a workflow step                                |
+| aggregate      | `npm run quality`          | all of the above except e2e and lighthouse                                       |
+| CI aggregate   | `npm run quality:ci`       | quality without secrets + lighthouse; gitleaks-action is a workflow step         |
 
 A gate is not accepted until it has been seen to fail on a planted case
 and then restored. Results live in "Gate proving log" below.
@@ -323,7 +331,8 @@ security:audit, security:secrets, build.
 AGENTS.md and siblings.
 
 **Required security checks.** gitleaks proven with a real-shaped test
-secret (not `AKIAIOSFODNN7EXAMPLE`), then deleted. `.env` gitignored
+secret (not the well-known AWS example allowlist key), then deleted. `.env`
+gitignored
 before first commit.
 
 **Required performance checks.** Production build succeeds. Bundle budget
@@ -478,7 +487,7 @@ blocker if GPU canvas paints confuse Lighthouse (record the score).
 
 - [x] Palettes and quality exercised (`P` → aurora in preview; quality cycle unit-tested)
 - [x] Mobile (375×667) and desktop (1280×720) screenshots: HUD readable, canvas fills
-- [x] Lighthouse not run: no chrome-devtools MCP in this session; GPU canvas scores would not be load-bearing. Recorded as deferred, not passing.
+- [x] Lighthouse desktop (Chrome locally): Performance 100, Accessibility 98, Best Practices 96. Floors 90/90/90. SEO excluded. chrome-devtools-mcp 1.7.0 is a project MCP.
 
 ### Milestone 4 — GitHub Pages live deploy
 
@@ -511,30 +520,30 @@ against a real remote.
 Filled during Milestone 0. Each row must have a planted failure, a
 non-zero exit, and a revert.
 
-| Gate       | Planted case                                      | Exit code | Restored | Notes                                                                                        |
-| ---------- | ------------------------------------------------- | --------- | -------- | -------------------------------------------------------------------------------------------- |
-| prettier   | extra indent in `src/constants.ts`                | 1         | yes      |                                                                                              |
-| eslint     | `export const planted: any = 1`                   | 1         | yes      | `@typescript-eslint/no-explicit-any`                                                         |
-| tsc        | `const plantedTsc: number = 'nope'`               | 2         | yes      |                                                                                              |
-| stylelint  | `body { color: RED; }`                            | 2         | yes      | `value-keyword-case`                                                                         |
-| htmlhint   | removed `<title>`                                 | 1         | yes      | `title-require`                                                                              |
-| vitest     | `expect(true).toBe(false)`                        | 1         | yes      |                                                                                              |
-| knip       | unused `src/dead-file.ts`                         | 1         | yes      | `--strict` in knip 6.32 means production-deps-only; gate is default max-issues=0             |
-| dpdm       | `cycle-a.ts` ↔ `cycle-b.ts`                       | 1         | yes      |                                                                                              |
-| jscpd      | cloned 10-line functions                          | 1         | yes      | Needed `--exit-code 1`; threshold alone still exited 0                                       |
-| gitleaks   | `AKIA1234567890ABCDEF` staged                     | 1         | yes      | `gitleaks protect --staged`. Allowlisted example keys were not used                          |
-| npm audit  | `minimist@0.0.8`                                  | 1         | yes      | critical prototype pollution; then uninstalled, audit clean                                  |
-| vite build | `throw new Error('planted build failure')` in cfg | 1         | yes      |                                                                                              |
-| semgrep    | n/a                                               | 2         | n/a      | pip-installed; `python -m semgrep` prints a deprecation line and exits 2 with no scan output |
+| Gate       | Planted case                                                    | Exit code | Restored | Notes                                                                                              |
+| ---------- | --------------------------------------------------------------- | --------- | -------- | -------------------------------------------------------------------------------------------------- |
+| prettier   | extra indent in `src/constants.ts`                              | 1         | yes      |                                                                                                    |
+| eslint     | `export const planted: any = 1`                                 | 1         | yes      | `@typescript-eslint/no-explicit-any`                                                               |
+| tsc        | `const plantedTsc: number = 'nope'`                             | 2         | yes      |                                                                                                    |
+| stylelint  | `body { color: RED; }`                                          | 2         | yes      | `value-keyword-case`                                                                               |
+| htmlhint   | removed `<title>`                                               | 1         | yes      | `title-require`                                                                                    |
+| vitest     | `expect(true).toBe(false)`                                      | 1         | yes      |                                                                                                    |
+| knip       | unused `src/dead-file.ts`                                       | 1         | yes      | `--strict` in knip 6.32 means production-deps-only; gate is default max-issues=0                   |
+| dpdm       | `cycle-a.ts` ↔ `cycle-b.ts`                                     | 1         | yes      |                                                                                                    |
+| jscpd      | cloned 10-line functions                                        | 1         | yes      | Needed `--exit-code 1`; threshold alone still exited 0                                             |
+| gitleaks   | staged AWS-shaped access key (not the public allowlist example) | 1         | yes      | `gitleaks protect --staged`                                                                        |
+| npm audit  | `minimist@0.0.8`                                                | 1         | yes      | critical prototype pollution; then uninstalled, audit clean                                        |
+| vite build | `throw new Error('planted build failure')` in cfg               | 1         | yes      |                                                                                                    |
+| semgrep    | `eval('1')` in `src/boot.ts`                                    | 1         | yes      | Local `no-eval` rule. `python -m semgrep` is a deprecated stub (exit 2); launcher uses `pysemgrep` |
+| lighthouse | performance floor 101                                           | 1         | yes      | Measured 100 / 98 / 96; floor 101 failed `100 < 101`                                               |
 
 ## Deferred gates
 
-| Gate                   | Reason                                                                                                                           | Plan                                                                              |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| semgrep local          | pip install succeeded; CLI exits 2 with only a deprecation warning (likely missing semgrep-core / PATH after a mcp pin conflict) | Prove on Ubuntu CI in Milestone 4; do not treat a silent exit 2 as a passing gate |
-| Live GitHub Actions    | No remote yet                                                                                                                    | Milestone 4                                                                       |
-| Live Lighthouse        | No Pages URL yet                                                                                                                 | Milestone 3 local, Milestone 4 live                                               |
-| bash `detect-stack.sh` | No WSL bash                                                                                                                      | PowerShell inventory used instead                                                 |
+| Gate                   | Reason                                                   | Plan                              |
+| ---------------------- | -------------------------------------------------------- | --------------------------------- |
+| Live GitHub Actions    | No remote yet                                            | Milestone 4                       |
+| Live Lighthouse        | No Pages URL yet. Local desktop Lighthouse has been run. | Milestone 4                       |
+| bash `detect-stack.sh` | No WSL bash                                              | PowerShell inventory used instead |
 
 ## Escape hatches tracker
 

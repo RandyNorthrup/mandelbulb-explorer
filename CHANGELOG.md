@@ -4,6 +4,26 @@ All notable changes to this project are documented in this file.
 
 The format is Keep a Changelog, and this project uses Semantic Versioning.
 
+## 0.1.1 — 2026-08-20
+
+### Added
+
+- Semgrep SAST gate (`npm run security:sast`). Local rules forbid `eval`,
+  `new Function`, `innerHTML` assignment, and `document.write`, plus
+  `--config auto`. A Node launcher finds `pysemgrep` on Windows because
+  `python -m semgrep` is a deprecated stub that exits 2.
+- Lighthouse desktop gate (`npm run lighthouse`) using Chrome. Measured
+  scores: Performance 100, Accessibility 98, Best Practices 96. Floors 90.
+  SEO is out of scope.
+- Project-scoped Chrome DevTools MCP (`chrome-devtools-mcp@1.7.0`) in
+  `.grok/config.toml` and `.vscode/mcp.json`. Chrome itself was already
+  installed.
+
+### Fixed
+
+- Documented AWS-shaped proving key removed from PLAN.md so Semgrep's
+  community secret rule does not treat the changelog of a test as a leak.
+
 ## 0.1.0 — 2026-08-20
 
 ### Added

@@ -6,6 +6,8 @@
   // `cycles` is omitted; dpdm is the cycle gate.
   // knip 6.32 `--strict` means "production deps only", not fail-closed.
   "ignoreBinaries": ["gitleaks"],
+  // chrome-devtools-mcp is the agent MCP server; no source file imports it.
+  "ignoreDependencies": ["chrome-devtools-mcp"],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "files": "error",

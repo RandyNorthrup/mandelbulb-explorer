@@ -1,0 +1,24 @@
+rules:
+  - id: no-eval
+    message: eval() is forbidden. This static app has no need for dynamic code execution.
+    languages: [javascript, typescript]
+    severity: ERROR
+    pattern: eval(...)
+
+  - id: no-new-function
+    message: new Function() is forbidden. Same injection class as eval().
+    languages: [javascript, typescript]
+    severity: ERROR
+    pattern: new Function(...)
+
+  - id: no-inner-html
+    message: DOM writes must use textContent, never innerHTML.
+    languages: [javascript, typescript]
+    severity: ERROR
+    pattern: $EL.innerHTML = $HTML
+
+  - id: no-document-write
+    message: document.write is forbidden.
+    languages: [javascript, typescript]
+    severity: ERROR
+    pattern: document.write(...)

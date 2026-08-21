@@ -1,0 +1,8 @@
+# Project-scoped MCP. Chrome is already installed on this machine
+# (C:\Program Files\Google\Chrome\Application\chrome.exe). This server is
+# Google's chrome-devtools-mcp 1.7.0, locked as a devDependency.
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["chrome-devtools-mcp"]
+enabled = true
